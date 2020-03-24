@@ -1,27 +1,31 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <Main />
+    <h1 align="left">微博用户行为可视化</h1>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import Main from "./components/Main.vue";
 export default {
   name: "App",
   components: {
-    Main
+  },
+  sockets: {
+    receiveData: function(message) {
+      console.log(message.data);
+    }
   }
 };
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
   margin-top: 60px;
+  width: 50%;
+  position: absolute;
+  left: 50%;
+  top: 20%;
+  transform: translate(-50%, -50%);
 }
 </style>
