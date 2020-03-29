@@ -53,7 +53,7 @@
 import Auth from "./Auth.vue";
 
 export default {
-  name: "Input",
+  name: "Form",
   components: { Auth },
   data() {
     return {

@@ -1,7 +1,7 @@
 <template>
   <el-container id="app">
     <el-header>
-      <h1 align="left">微博用户可视化工具</h1>
+      <h1 align="center">微博用户可视化工具</h1>
     </el-header>
     <el-main>
       <router-view></router-view>
@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: "App",
+  name: "App"
 };
 </script>
 
@@ -20,9 +20,5 @@ export default {
   display: flex;
   align-items: center;
   background: #f6f8fa;
-}
-
-.h1 {
-  font-size: 36px;
 }
 </style>
