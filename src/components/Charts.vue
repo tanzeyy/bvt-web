@@ -1,7 +1,21 @@
 <template>
   <el-card class="box-card" shadow="never">
     <div slot="header" class="header clearfix">
-      <span>图表</span>
+      <el-row>
+        <el-col :span="23">
+          <span>图表</span>
+        </el-col>
+        <el-col :span="1">
+          <bounce-loader
+            v-if="loading"
+            align="right"
+            :loading="loading"
+            :color="loaderOptions.color"
+            :size="loaderOptions.size"
+          ></bounce-loader>
+          <i v-else class="el-icon-check" style="font-size: 28.5px; color: #67c23a"/>
+        </el-col>
+      </el-row>
     </div>
     <highcharts :options="wordCloudChartOptions"></highcharts>
     <highcharts :options="streamGraphChartOptions"></highcharts>
@@ -17,13 +31,22 @@
 </template>
 
 <script>
+import BounceLoader from "vue-spinner/src/BounceLoader.vue";
+
 export default {
   name: "Charts",
+  components: {
+    BounceLoader
+  },
   data() {
     return {
+      loading: false,
+      loaderOptions: {
+        color: "#67c23a",
+        size: "30px"
+      },
       mouseDown: false,
       mousePos: null,
-      notDone: true,
       curTopics: {},
       wordCloudChartOptions: {
         series: [
