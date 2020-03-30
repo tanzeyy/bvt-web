@@ -92,7 +92,6 @@ export default {
           crosshair: true,
           categories: [],
           labels: {
-            align: "left",
             reserveSpace: true,
             rotation: 270
           }
