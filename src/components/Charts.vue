@@ -13,13 +13,14 @@
             :color="loaderOptions.color"
             :size="loaderOptions.size"
           ></bounce-loader>
-          <i v-else class="el-icon-check" style="font-size: 28.5px; color: #67c23a"/>
+          <i v-else class="el-icon-check" style="font-size: 28.5px; color: #67c23a" />
         </el-col>
       </el-row>
     </div>
-    <highcharts :options="wordCloudChartOptions"></highcharts>
-    <highcharts :options="streamGraphChartOptions"></highcharts>
+    <highcharts v-if="show.wordcloud" :options="wordCloudChartOptions"></highcharts>
+    <highcharts v-if="show.streamgraph" :options="streamGraphChartOptions"></highcharts>
     <highcharts
+      v-if="show.hist"
       @mousedown.native="mouseDownEvent"
       @mouseup.native="mouseUpEvent"
       @mousemove.native="mouseMoveEvent"
@@ -40,14 +41,18 @@ export default {
   },
   data() {
     return {
-      loading: false,
+      loading: true,
+      show: {
+        wordcloud: false,
+        streamgraph: false,
+        hist: false
+      },
       loaderOptions: {
         color: "#67c23a",
         size: "30px"
       },
       mouseDown: false,
       mousePos: null,
-      curTopics: {},
       wordCloudChartOptions: {
         series: [
           {
@@ -65,6 +70,9 @@ export default {
         ],
         title: {
           text: "用户关注话题词云"
+        },
+        credits: {
+          enabled: false
         }
       },
       streamGraphChartOptions: {
@@ -109,7 +117,10 @@ export default {
             }
           }
         },
-        series: []
+        series: [],
+        credits: {
+          enabled: false
+        }
       },
       bar3DChartOptions: {
         chart: {
@@ -163,7 +174,10 @@ export default {
             data: [],
             stack: 2
           }
-        ]
+        ],
+        credits: {
+          enabled: false
+        }
       }
     };
   },
@@ -216,10 +230,14 @@ export default {
 
       this.streamGraphChartOptions.xAxis.categories = days;
       this.streamGraphChartOptions.series = topics;
+      this.wordCloudChartOptions.series[0].data = topics;
+
+      this.$emit("update:cnt");
     },
-    curStatus: function(message) {
+    updateStatus: function(message) {
       if (message.status === "done") {
-        this.notDone = false;
+        this.loading = false;
+        this.$emit("update:progress");
       }
     }
   }

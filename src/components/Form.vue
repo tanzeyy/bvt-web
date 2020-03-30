@@ -1,9 +1,9 @@
 <template>
   <el-card class="box-card" shadow="never">
     <div slot="header" class="header clearfix">
-      <span>信息表格</span>
+      <span>提交信息</span>
     </div>
-    <el-form :label-position="form.options.labelPosition">
+    <el-form :label-position="form.options.labelPosition" :model="formData">
       <el-form-item label="用户标识类型">
         <el-radio-group v-model="identifier.type">
           <el-radio
@@ -37,13 +37,13 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item label="图表类型">
-        <el-checkbox-group v-model="charts.value">
+        <el-checkbox-group v-model="info.charts">
           <el-checkbox v-for="option in charts.options" :key="option" :label="option" />
         </el-checkbox-group>
       </el-form-item>
       <el-form-item align="right">
-        <el-button type="primary" @click="onSubmit">提交</el-button>
-        <el-button>取消</el-button>
+        <el-button type="primary" @click="onSubmit">完成</el-button>
+        <el-button @click="$emit('show:status')">取消</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -57,7 +57,14 @@ export default {
   components: { Auth },
   data() {
     return {
-      uid: "",
+      formData: {
+
+      },
+      info: {
+        uid: "",
+        date: "",
+        charts: []
+      },
       form: {
         options: { labelPosition: "top" }
       },
@@ -102,38 +109,32 @@ export default {
     needAuth: function() {
       console.log(this.identifier.type);
       return this.identifier.type === "用户昵称";
-    },
-    date: function() {
-      return this.datePicker.value
-        .toLocaleDateString()
-        .split("/")
-        .join("-");
     }
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
       if (this.identifier.type === "用户昵称") {
-        this.$axios
+        await this.$axios
           .get("/get_uid", {
             params: {
               screen_name: this.identifier.value
             }
           })
           .then(response => {
-            this.uid = response.data.uid;
+            this.info.uid = response.data.uid;
           })
           .catch(() => {
             this.$message("获取uid失败");
           });
       } else {
-        this.uid = this.identifier.value;
+        this.info.uid = this.identifier.value;
       }
-    },
-    queryWeibo() {
-      this.$socket.emit("get_weibo", {
-        uid: this.uid,
-        date: this.date
-      });
+      this.info.date = this.datePicker.value
+        .toLocaleDateString()
+        .split("/")
+        .join("-");
+      this.$emit("update:info", this.info);
+      this.$emit("show:status");
     }
   }
 };
