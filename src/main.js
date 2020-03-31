@@ -6,12 +6,10 @@ import './plugins/hcharts.js'
 import router from './plugins/routes.js'
 import axios from 'axios'
 import './assets/global.css'
-import VueCookies from 'vue-cookies'
-
-Vue.use(VueCookies)
 
 
 Vue.config.productionTip = false
+axios.defaults.baseURL = "/api"
 Vue.prototype.$axios = axios
 
 new Vue({

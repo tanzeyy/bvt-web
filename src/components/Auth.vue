@@ -64,7 +64,7 @@ export default {
     openWeiboAuth() {
       this.poll = setInterval(this.checkAuth, 500);
       window.open(
-        "https://api.weibo.com/oauth2/authorize?client_id=170128421&redirect_uri=http://127.0.0.1:8080/auth_callback"
+        "https://api.weibo.com/oauth2/authorize?client_id=170128421&redirect_uri=http://183.129.170.180:8085/auth_callback"
       );
     },
     checkAuth() {
